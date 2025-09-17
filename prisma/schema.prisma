@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Focus {
+  GENERAL
+  ADHD
+  ANXIETY
+  DEPRESSION
+  STRESS
+  SLEEP
+  FOCUS
+  PANIC
+}
+
+enum SubscriptionType {
+  FREE
+  PREMIUM
+  LIFETIME
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  PAUSED
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?   @map("password_hash")
+  avatarUrl     String?   @map("avatar_url")
+  birthDate     DateTime? @map("birth_date")
+  reminderTime  String?   @map("reminder_time")
+  dailyGoal     Int       @default(5) @map("daily_goal")
+  isActive      Boolean   @default(true) @map("is_active")
+  emailVerified Boolean   @default(false) @map("email_verified")
+  lastActiveAt  DateTime? @map("last_active_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  primaryFocus Focus @default(GENERAL) @map("primary_focus")
+
+  subscription Subscription?
+  sessions     Session[]
+  favorites    Favorites[]
+  progress     UserProgress[]
+
+  @@index([email], name: "idx_user_email")
+  @@map("users")
+}
+
+model Subscription {
+  id               String    @id @default(cuid())
+  userId           String    @unique @map("user_id")
+  stripeCustomerId String?   @map("stripe_customer_id")
+  stripeSubId      String?   @map("stripe_sub_id")
+  startDate        DateTime  @default(now()) @map("start_date")
+  endDate          DateTime? @map("end_date")
+  canceleteAt      DateTime? @map("canceled_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  type   SubscriptionType   @default(FREE)
+  status SubscriptionStatus @default(ACTIVE)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Session {
+  id           String    @id @default(cuid())
+  userId       String    @map("user_id")
+  meditationId String    @map("meditation_id")
+  startedAt    DateTime  @default(now()) @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  duration     Int       @default(0) // in seconds
+  rating       Int? // 1 to 5
+  notes        String?
+  deviceType   String?   @map("device_type") // web | ios | android
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meditation Meditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "idx_session_user_id")
+  @@index([meditationId], name: "idx_session_meditation_id")
+  @@index([startedAt], name: "idx_session_started_at")
+  @@map("sessions")
+}
+
+model Favorites {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  meditationId String   @map("meditation_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meditation Meditation @relation(fields: [meditationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, meditationId], name: "uniq_user_meditation")
+  @@index([userId], name: "idx_favorite_user_id")
+  @@index([meditationId], name: "idx_favorite_meditation_id")
+  @@map("favorites")
+}
+
+model Meditation {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  duration      Int // in seconds
+  audioUrl      String   @map("audio_url")
+  audioUrlHQ    String?  @map("audio_url_hq") // high quality version
+  coverImageUrl String?  @map("cover_image_url")
+  categoryId    String   @map("category_id")
+  focus         Focus[]  @default([]) //can target multiple focuses
+  level         Level    @default(BEGINNER)
+  isPremium     Boolean  @default(false) @map("is_premium")
+  isActive      Boolean  @default(true) @map("is_active")
+  order         Int      @default(0) // for sorting within a category
+  instructor    String?  @map("instructor")
+  transcript    String?  @db.Text
+  tags          String[] // ["5-minutes", "sleep", "anxiety"]
+  playCount     Int      @default(0) @map("play_count")
+  avgRating     Float    @default(0) @map("avg_rating")
+  totalRatings  Int      @default(0) @map("total_ratings")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  category  Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sessions  Session[]
+  favorites Favorites[]
+
+  @@index([categoryId], name: "idx_meditation_category_id")
+  @@index([isActive], name: "idx_meditation_is_active")
+  @@index([isPremium], name: "idx_meditation_is_premium")
+  @@index([focus], name: "idx_meditation_focus")
+  @@map("meditations")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  iconUrl     String?  @map("icon_url")
+  color       String?
+  order       Int      @default(0) // for sorting
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  meditations Meditation[]
+
+  @@index([slug], name: "idx_category_slug")
+  @@map("categories")
+}
+
+model UserProgress {
+  id              String    @id @default(cuid())
+  userId          String    @map("user_id")
+  currentStreak   Int       @default(0) @map("current_streak")
+  longestStreak   Int       @default(0) @map("longest_streak")
+  lastSessionDate DateTime? @map("last_session_date")
+  totalSessions   Int       @default(0) @map("total_sessions")
+  totalMinutes    Int       @default(0) @map("total_minutes")
+  monthlyMinutes  Json?     @map("monthly_minutes") // { "2023-01": 120, "2023-02": 90 }
+  unlockBadges    String[]  @default([]) @map("unlocked_badges") // array of badge IDs
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "idx_user_progress_user_id")
+  @@map("user_progress")
+}
