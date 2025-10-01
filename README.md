@@ -3,9 +3,8 @@
 <div align="center">
   <img width="300" height="300" alt="Nuro - seu amigo" src="https://github.com/user-attachments/assets/30587ab4-9ac0-48fa-9ec1-88230a5b5a89" />
 
-  
   **Meditação personalizada para TDAH e ansiedade**
-  
+
   [![Status](https://img.shields.io/badge/status-em_desenvolvimento-green)](https://github.com/yourusername/nuro)
   [![Licença](https://img.shields.io/badge/licença-MIT-blue)](LICENSE)
   [![Tecnologia](https://img.shields.io/badge/powered_by-Bun_+_Elysia-pink)](https://bun.sh)
@@ -88,6 +87,6 @@ Este projeto está licenciado sob a Licença MIT para componentes open source. P
 
 <div align="center">
   <strong>Respire. Foque. Evolua.</strong>
-  
+
   Nuro está aqui para acompanhar você, um momento de cada vez.
 </div>
