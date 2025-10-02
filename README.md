@@ -1,14 +1,105 @@
-# 🧘 Nuro - Meditação Inteligente para Mentes Únicas
+# 🧘 Nuro - Intelligent Meditation for Unique Minds | Meditação Inteligente para Mentes Únicas
 
 <div align="center">
-  <img width="300" height="300" alt="Nuro - seu amigo" src="https://github.com/user-attachments/assets/30587ab4-9ac0-48fa-9ec1-88230a5b5a89" />
+  <img width="300" height="300" alt="Nuro - your friend | seu amigo" src="https://github.com/user-attachments/assets/30587ab4-9ac0-48fa-9ec1-88230a5b5a89" />
 
-  **Meditação personalizada para TDAH e ansiedade**
+  **Personalized meditation for ADHD and anxiety | Meditação personalizada para TDAH e ansiedade**
 
-  [![Status](https://img.shields.io/badge/status-em_desenvolvimento-green)](https://github.com/yourusername/nuro)
-  [![Licença](https://img.shields.io/badge/licença-MIT-blue)](LICENSE)
-  [![Tecnologia](https://img.shields.io/badge/powered_by-Bun_+_Elysia-pink)](https://bun.sh)
+  [![Status](https://img.shields.io/badge/status-in_development_|_em_desenvolvimento-green)](https://github.com/yourusername/nuro)
+  [![License | Licença](https://img.shields.io/badge/license_|_licença-MIT-blue)](LICENSE)
+  [![Technology | Tecnologia](https://img.shields.io/badge/powered_by-Bun_+_Elysia-pink)](https://bun.sh)
+  
+  [🇬🇧 English](#english) | [🇧🇷 Português](#português)
 </div>
+
+---
+
+## English
+
+## Meet Nuro
+
+Nuro is more than a meditation app. It's your personal companion on a journey of self-discovery and well-being, specially developed for people facing unique challenges with ADHD and anxiety. Our mascot represents the calm and focus we can all achieve, regardless of how our minds work.
+
+## Why Nuro is Different
+
+Most meditation apps were created thinking about long sessions and minds that can easily quiet down. Nuro understands that each mind is unique and deserves a personalized approach.
+
+### Our Approach
+
+**Short and Effective Sessions**: 3 to 5-minute meditations specifically designed to maintain focus without causing frustration.
+
+**Adaptive Intelligence**: The app learns your patterns and suggests the best practices for each moment of your day.
+
+**Immediate Support**: SOS resources for crisis moments, with proven quick relief techniques.
+
+**Gentle Gamification**: Reward system that motivates without pressuring, respecting your limits and celebrating small victories.
+
+## Key Features
+
+### For ADHD
+Nuro offers meditations specially developed for hyperactive minds, with stimulating visual resources, clear and direct instructions, and visual timers that help maintain focus. Optional binaural sounds assist concentration without causing distraction.
+
+### For Anxiety
+Evidence-based techniques for anxiety management, including guided breathing exercises, grounding practices for panic moments, and nighttime meditations to calm the mind before sleep.
+
+### Progress System
+Track your evolution with motivating but non-intimidating statistics. Celebrate practice streaks, visualize your progress over time, and unlock new meditations as you advance on your journey.
+
+## Technical Structure
+
+Nuro was built with modern technologies to ensure performance and reliability:
+
+```
+Backend: Bun + Elysia + PostgreSQL
+Mobile: React Native + Expo
+Infrastructure: Railway + Cloudflare
+```
+
+Our architecture was designed to be scalable and efficient, ensuring the app works perfectly even offline, with intelligent synchronization when connection is available.
+
+## Business Model
+
+Nuro operates with a carefully balanced freemium model. The free version offers access to essential meditations and basic tracking tools. The premium version unlocks the complete catalog, advanced personalization features, and new content weekly.
+
+We believe mental well-being should be accessible, so we maintain a robust set of free resources while offering additional value for those who want to deepen their practice.
+
+## Our Mission
+
+To make meditation accessible and effective for all minds, especially those who traditionally find difficulties with conventional contemplative practices. We want each person to discover that inner peace and focus are possible, regardless of diagnoses or labels.
+
+## Community and Support
+
+We are building a welcoming community where people can share experiences and support each other. Our commitment is to create a safe space, free from judgment and focused on each individual's personal growth.
+
+## Roadmap
+
+**Phase 1 - Foundation** (September - December 2025): MVP launch with essential meditations and basic progress system.
+
+**Phase 2 - Expansion** (January - April 2026): Implementation of social features, new meditation types, and wearables integration.
+
+**Phase 3 - Intelligence** (May - August 2026): AI-based recommendation system and advanced personalization.
+
+**Phase 4 - Scale** (October - December 2026): International expansion and partnership program with mental health professionals.
+
+## Contributing
+
+While Nuro's core is proprietary, we maintain some open source components and love receiving contributions from the community. If you're interested in helping people with ADHD and anxiety find inner peace, contact us via email or other communication channels.
+
+## License and Contact
+
+This project is licensed under the MIT License for open source components. For commercial inquiries, partnerships, or support, please contact zirondigabriel@gmail.com.
+
+---
+
+<div align="center">
+  <strong>Breathe. Focus. Evolve.</strong>
+
+  Nuro is here to accompany you, one moment at a time.
+</div>
+
+---
+
+## Português
 
 ## Conheça o Nuro
 
