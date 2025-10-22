@@ -2,7 +2,6 @@ import type { LoginInput, RegisterInput } from '../../../validations/auth.ts'
 import { prisma } from '../../../db/index.ts'
 import { JWTUtils } from '../../../utils/jwt.ts'
 import { PasswordUtils } from '../../../utils/password.ts'
-import { S3Logger } from '../../../utils/s3logger.ts'
 
 export class AuthController {
   static async register({ body, set }: { body: RegisterInput, set: any }) {
@@ -48,17 +47,6 @@ export class AuthController {
         token,
       }
     } catch (error) {
-      await S3Logger.logAuthError(
-        error,
-        'POST /auth/register',
-        undefined,
-        {
-          method: 'POST',
-          url: '/auth/register',
-          body: { email: body.email, name: body.name },
-        },
-      )
-
       console.error(error)
       set.status = 500
 
@@ -93,6 +81,15 @@ export class AuthController {
         }
       }
 
+      if (!email) {
+        set.status = 401
+
+        return {
+          error: 'Unauthorized',
+          message: 'Invalid credentials',
+        }
+      }
+
       if (!user.passwordHash) {
         set.status = 401
 
@@ -105,17 +102,6 @@ export class AuthController {
       const isValidPassword = await PasswordUtils.verify(password, user.passwordHash)
 
       if (!isValidPassword) {
-        await S3Logger.logAuthError(
-          new Error('Invalid password attempt'),
-          'POST /auth/login',
-          { email: user.email },
-          {
-            method: 'POST',
-            url: '/auth/login',
-            body: { email: body.email },
-          },
-        )
-
         set.status = 401
 
         return {
@@ -141,16 +127,7 @@ export class AuthController {
         token,
       }
     } catch (error) {
-      await S3Logger.logAuthError(
-        error,
-        'POST /auth/login',
-        undefined,
-        {
-          method: 'POST',
-          url: '/auth/login',
-          body: { email: body.email },
-        },
-      )
+      console.error(error)
 
       set.status = 500
 
@@ -178,17 +155,6 @@ export class AuthController {
       const payload = JWTUtils.verifyToken(token)
 
       if (!payload) {
-        await S3Logger.logAuthError(
-          new Error('Invalid JWT token'),
-          'GET /auth/me',
-          undefined,
-          {
-            method: 'GET',
-            url: '/auth/me',
-            headers: { authorization },
-          },
-        )
-
         set.status = 401
 
         return {
@@ -223,15 +189,7 @@ export class AuthController {
 
       return { user }
     } catch (error) {
-      await S3Logger.logAuthError(
-        error,
-        'GET /auth/me',
-        undefined,
-        {
-          method: 'GET',
-          url: '/auth/me',
-        },
-      )
+      console.error(error)
 
       set.status = 500
 

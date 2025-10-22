@@ -7,7 +7,6 @@ import type {
   UpdateReminderTimeDto,
 } from '../../../validations/onboarding.validation.ts'
 import { onboardingService } from '../../../services/onboarding.service.ts'
-import { S3Logger } from '../../../utils/s3logger.ts'
 
 export class OnboardingController {
   static async getStatus({ user, set }: { user: AuthUser, set: any }) {
@@ -23,16 +22,7 @@ export class OnboardingController {
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'GET /onboarding/status',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'GET',
-          url: '/onboarding/status',
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
@@ -45,29 +35,27 @@ export class OnboardingController {
 
   static async updateName({ user, body, set }: { user: AuthUser, body: UpdateNameDto, set: any }) {
     try {
+      if (!user || !user.id) {
+        set.status = 401
+
+        return {
+          success: false,
+          error: 'Unauthorized',
+        }
+      }
       const updatedUser = await onboardingService.updateName(user.id, body)
 
       return {
         success: true,
-        data: updatedUser,
         message: 'Name updated successfully',
+        data: updatedUser,
       }
     } catch (error) {
       const errorData = error instanceof Error
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'PATCH /onboarding/name',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'PATCH',
-          url: '/onboarding/name',
-          body,
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
@@ -84,25 +72,15 @@ export class OnboardingController {
 
       return {
         success: true,
-        data: updatedUser,
         message: 'Reminder time updated successfully',
+        data: updatedUser,
       }
     } catch (error) {
       const errorData = error instanceof Error
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'PATCH /onboarding/reminder-time',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'PATCH',
-          url: '/onboarding/reminder-time',
-          body,
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
@@ -119,25 +97,15 @@ export class OnboardingController {
 
       return {
         success: true,
-        data: updatedUser,
         message: 'Birth date updated successfully',
+        data: updatedUser,
       }
     } catch (error) {
       const errorData = error instanceof Error
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'PATCH /onboarding/birth-date',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'PATCH',
-          url: '/onboarding/birth-date',
-          body,
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
@@ -162,17 +130,7 @@ export class OnboardingController {
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'PATCH /onboarding/daily-goal',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'PATCH',
-          url: '/onboarding/daily-goal',
-          body,
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
@@ -197,23 +155,39 @@ export class OnboardingController {
         ? { message: error.message, stack: error.stack }
         : { message: String(error) }
 
-      await S3Logger.logError({
-        service: 'onboarding',
-        endpoint: 'PATCH /onboarding/primary-focus',
-        error: errorData,
-        user: { id: user.id },
-        request: {
-          method: 'PATCH',
-          url: '/onboarding/primary-focus',
-          body,
-        },
-      })
+      console.error(errorData)
 
       set.status = 500
 
       return {
         success: false,
         error: 'Failed to update primary focus',
+      }
+    }
+  }
+
+  // TODO: Finish later
+  static async updateAvatar({ user, body, set }: { user: AuthUser, body: string, set: any }) {
+    try {
+      const updatedUser = await onboardingService.updateAvatar(user.id, body)
+
+      return {
+        success: true,
+        message: 'Avatar updated successfully',
+        data: updatedUser,
+      }
+    } catch (error) {
+      const errorData = error instanceof Error
+        ? { message: error.message, stack: error.stack }
+        : { message: String(error) }
+
+      console.error(errorData)
+
+      set.status = 500
+
+      return {
+        success: false,
+        error: 'Failed to update avatar',
       }
     }
   }

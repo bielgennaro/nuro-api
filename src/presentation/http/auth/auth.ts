@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia'
-import { z } from 'zod'
+import { handleValidationError } from '../../../handlers/error.handler.js'
 import { loginSchema, registerSchema } from '../../../validations/auth.ts'
 import { AuthController } from './auth.controller.ts'
 
@@ -10,24 +10,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
       return AuthController.register({ body: validatedBody, set })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        set.status = 400
-
-        return {
-          error: 'Validation Error',
-          message: 'Invalid data',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-      set.status = 500
-
-      return {
-        error: 'Internal Server Error',
-        message: 'Validation failed',
-      }
+      return handleValidationError(error, { set })
     }
   }, {
     body: t.Object({
@@ -47,24 +30,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
 
       return AuthController.login({ body: validatedBody, set })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        set.status = 400
-
-        return {
-          error: 'Validation Error',
-          message: 'Invalid data',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-      set.status = 500
-
-      return {
-        error: 'Internal Server Error',
-        message: 'Validation failed',
-      }
+      return handleValidationError(error, { set })
     }
   }, {
     body: t.Object({

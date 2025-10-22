@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia'
-import { z } from 'zod'
+import { handleValidationError } from '../../../handlers/error.handler.js'
 import { requireAuth } from '../../../middleware/auth.ts'
 import {
   updateBirthDateSchema,
@@ -10,10 +10,8 @@ import {
 } from '../../../validations/onboarding.validation.ts'
 import { OnboardingController } from './onboarding.controller.ts'
 
-const authMiddleware = requireAuth()
-
 export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
-  .use(authMiddleware)
+  .use(requireAuth())
   .get('/status', async (context: any) => {
     return OnboardingController.getStatus({
       user: context.user,
@@ -37,25 +35,7 @@ export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
         set: context.set,
       })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        context.set.status = 400
-
-        return {
-          success: false,
-          error: 'Validation Error',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-
-      context.set.status = 500
-
-      return {
-        success: false,
-        error: 'Validation failed',
-      }
+      return handleValidationError(error, context)
     }
   }, {
     body: t.Object({
@@ -78,25 +58,7 @@ export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
         set: context.set,
       })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        context.set.status = 400
-
-        return {
-          success: false,
-          error: 'Validation Error',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-
-      context.set.status = 500
-
-      return {
-        success: false,
-        error: 'Validation failed',
-      }
+      return handleValidationError(error, context)
     }
   }, {
     body: t.Object({
@@ -119,25 +81,7 @@ export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
         set: context.set,
       })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        context.set.status = 400
-
-        return {
-          success: false,
-          error: 'Validation Error',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-
-      context.set.status = 500
-
-      return {
-        success: false,
-        error: 'Validation failed',
-      }
+      return handleValidationError(error, context)
     }
   }, {
     body: t.Object({
@@ -160,25 +104,7 @@ export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
         set: context.set,
       })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        context.set.status = 400
-
-        return {
-          success: false,
-          error: 'Validation Error',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-
-      context.set.status = 500
-
-      return {
-        success: false,
-        error: 'Validation failed',
-      }
+      return handleValidationError(error, context)
     }
   }, {
     body: t.Object({
@@ -201,25 +127,7 @@ export const onboardingRoutes = new Elysia({ prefix: '/onboarding' })
         set: context.set,
       })
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        context.set.status = 400
-
-        return {
-          success: false,
-          error: 'Validation Error',
-          details: error.issues.map(err => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        }
-      }
-
-      context.set.status = 500
-
-      return {
-        success: false,
-        error: 'Validation failed',
-      }
+      return handleValidationError(error, context)
     }
   }, {
     body: t.Object({
